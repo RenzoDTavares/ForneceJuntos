@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário com Máscaras</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <div id="message" class="alert alert-danger" role="alert" style="display:none;"></div>
+        
+        <h2>Formulário com Máscaras</h2>
+        <form id="fornecedorForm" method="post">
+            <div class="form-group">
+                <label for="id_cnpj"  class="form-label">CNPJ:</label>
+                {{ fornecedor_form.cnpj }}
+            </div>
+            <div class="form-group">
+                <label for="id_CEP">CEP:</label>
+                <input type="text" id="id_CEP" class="form-control" placeholder="00000-000">
+            </div>
+            <div class="form-group">
+                <label for="id_conta">Conta:</label>
+                <input type="text" id="id_conta" class="form-control" placeholder="00000000-0">
+            </div>
+
+            <div class="form-group">
+                <label for="tipo_contato">Tipo de Contato:</label>
+                <select id="tipo_contato" class="form-control">
+                    <option value="1">Telefone</option>
+                    <option value="2">Celular</option>
+                    <option value="3">Email</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="valor_contato">Valor do Contato:</label>
+                <input type="text" id="valor_contato" class="form-control" placeholder="Digite o contato">
+            </div>
+        </form>
+        
+        <button class="btn btn-primary" onclick="mostrarMensagem('Esta é uma mensagem de teste')">Mostrar Mensagem</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function mostrarMensagem(mensagem) {
+            var messageElement = $('#message');
+            messageElement.text(mensagem).show();
+            $('html, body').animate({
+                scrollTop: messageElement.offset().top
+            }, 500);
+        }
+
+        $(document).ready(function(){
+        // Aplicar máscaras aos campos
+        $('#id_cnpj').mask('00.000.000/0000-00');
+        $('#id_CEP').mask('00000-000');
+        $('#id_conta').mask('00000000-0');
+
+        // Lidar com mudanças no tipo de contato
+        $('#tipo_contato').change(function() {
+            var tipo = $(this).val();
+            var $valorContato = $('#valor_contato');
+            $valorContato.val('');
+            
+            switch (tipo) {
+                case '1':
+                    $valorContato.mask('(00) 0000-0000');
+                    break;
+                case '2':
+                    $valorContato.mask('(00) 00000-0000');
+                    break;
+                case '3':
+                    $valorContato.unmask();
+                    break;
+            }
+        });
+    });
+    </script>
+</body>
+</html>

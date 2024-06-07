@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<style>
+    /* Estilos do Bootstrap para form-control */
+    input {
+        display: block;
+        width: 70%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    input:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    input[name="CEP"] {
+       width: 34%;
+        margin-right: 15px;
+    }
+
+</style>
+
+<div style="margin-top: 20px">
+    <h2 id="teste">Editar Fornecedor</h2>
+    <div class="container mt-4" style="padding: 0px;">
+        <div class="container mt-4" style="padding: 0px;">
+            {% if error_message %}
+                <div id="message" class="alert alert-danger" role="alert">{{ error_message }}</div>
+            {% endif %}
+        </div>
+        <div id="message" class="alert alert-danger" role="alert" style="display:none;"></div>
+    </div>
+    <form id="fornecedorForm" method="post">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_cnpj" class="col-form-label col-md-3" style="width: 200px;">CNPJ:</label>
+                    <div class="col-md-6" >
+                        {{ fornecedor_form.cnpj}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_razao_social" class="col-form-label col-md-3" style="width: 200px;">Razão Social:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.razao_social}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_nome_fantasia" class="col-form-label col-md-3" style="width: 200px;">Nome Fantasia:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.nome_fantasia }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_tipo_bebida" class="col-form-label col-md-3" style="width: 200px;">Tipo de Bebida:</label>
+                    <div class="col-md-4" style="width:35.5%;">
+                        <select id="id_tipo_bebida" name="tipo_bebida" class="form-select">
+                            <option value="">Selecione um tipo de bebida</option>
+                            {% for choice in fornecedor_form.tipo_bebida.field.choices %}
+                                <option value="{{ choice.0 }}" {% if choice.0 == fornecedor_form.tipo_bebida.value %}selected{% endif %}>{{ choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="crow mb-3 input-group">
+                <label for="id_CEP" class="col-form-label col-md-3" style="width: 200px;">CEP:</label>
+                    {{ fornecedor_form.CEP }}
+                    <div class="input-group-append">
+                        <button type="button" onclick="pesquisarCEP()" class="btn btn-primary">Buscar CEP</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_logradouro" class="col-form-label col-md-3" style="width: 200px;">Logradouro:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.logradouro }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_numero" class="col-form-label col-md-3" style="width: 200px;">Número:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.numero }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_complemento" class="col-form-label col-md-3" style="width: 200px;">Complemento:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.complemento }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_cidade" class="col-form-label col-md-3" style="width: 200px;">Cidade:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.cidade }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_estado" class="col-form-label col-md-3" style="width: 200px;">Estado:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.estado }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_agencia" class="col-form-label col-md-3" style="width: 200px;">Agência:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.agencia }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_banco" class="col-form-label col-md-3" style="width: 200px;">Banco:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.banco }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row mb-3">
+                    <label for="id_conta" class="col-form-label col-md-3" style="width: 200px;">Conta:</label>
+                    <div class="col-md-6">
+                        {{ fornecedor_form.conta }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Contatos</h3>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="tipo_contato" class="form-label">Tipo de Contato:</label>
+                    <select id="tipo_contato" name="tipo_contato" class="form-select" onchange="clearField()">
+                        <option value="1">Telefone</option>
+                        <option value="2">Celular</option>
+                        <option value="3">Email</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="valor_contato" class="form-label">Valor do Contato:</label>
+                    <input type="text" id="valor_contato" oninput="applyMask(this)" name="valor_contato" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4 align-self-end">
+                <div class="form-group">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="button" onclick="adicionarContato()" class="btn btn-primary">Incluir</button>
+                </div>
+            </div>
+        </div>
+
+        <table id="tabela_contatos" class="table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Contato</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contato in contatos_nao_salvos %}
+                    <tr>
+                        <td>{{ contato.tipo }}</td>
+                        <td>{{ contato.valor }}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="removerContato(this)">Remover</button></td>
+                    </tr>
+                {% endfor %}
+                {% if contatos_nao_salvos|length == 0 %}
+                    <tr>
+                        <td> -- </td>
+                        <td> -- </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <input type="hidden" id="contatosExistentesJSON" name="contatosExistentesJSON" value="{{ contatos_nao_salvos_json }}">
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <button type="button" onclick="window.location.href = '/'" class="btn btn-primary">Voltar</button>
+            </div>
+            <div class="col-md-8 text-end">
+                <button type="button" onclick="salvarFornecedor()" class="btn btn-success">Salvar Fornecedor</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    /* Estilo para campo CNPJ quando desfocado */
+    .campo-desfocado {
+        opacity: 0.5; /* Define a opacidade para 50% */
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+    // Bloqueia o campo CNPJ para edição
+    $('#id_cnpj').prop('readonly', true).addClass('campo-desfocado');
+</script>
+<script>
+      function applyMask(input) {
+        var value = input.value;
+        var cleanValue = value.trim().replace(/\D/g, ''); // Remove leading and trailing whitespace and non-digit characters
+        var formattedValue = '';
+
+        // Verifica o tipo de contato selecionado
+        var tipoContato = $('#tipo_contato').val();
+
+        // Se o tipo de contato for '3' (e-mail), não aplicamos nenhuma máscara
+        if (tipoContato === '3') {
+            input.value = value; // Mantém o valor original se for e-mail
+            return;
+        }
+
+        // Limita o campo a 12 caracteres para telefone e 13 para celular
+        var maxLength = tipoContato === '1' ? 10 : tipoContato === '2' ? 11 : 100;
+        cleanValue = cleanValue.substr(0, maxLength); // Limita o tamanho do valor limpo
+
+        // Aplica a máscara de acordo com o tipo de contato
+        if (tipoContato === '1') { // Telefone
+            formattedValue = applyTelephoneMask(cleanValue);
+        } else if (tipoContato === '2') { // Celular
+            formattedValue = applyCellphoneMask(cleanValue);
+        }
+
+        input.value = formattedValue;
+    }
+
+    function clearField() {
+        // Limpa o campo de entrada
+        $('input[id="valor_contato"]').val('');
+    }
+
+    function applyTelephoneMask(value) {
+        // Aplica a máscara para telefone (00) 0000-0000
+        var formattedValue = '';
+        for (var i = 0; i < value.length; i++) {
+            if (i === 0) {
+                formattedValue += '('; // Abre parênteses no início
+            } else if (i === 2) {
+                formattedValue += ') '; // Fecha parênteses e adiciona espaço após os dois primeiros dígitos
+            } else if (i === 6) {
+                formattedValue += '-'; // Adiciona hífen após os próximos quatro dígitos
+            }
+            formattedValue += value[i];
+        }
+        return formattedValue;
+    }
+
+    function applyCellphoneMask(value) {
+        // Aplica a máscara para celular (00) 00000-0000
+        var formattedValue = '';
+        for (var i = 0; i < value.length; i++) {
+            if (i === 0) {
+                formattedValue += '('; // Abre parênteses no início
+            } else if (i === 2) {
+                formattedValue += ') '; // Fecha parênteses e adiciona espaço após os dois primeiros dígitos
+            } else if (i === 7) {
+                formattedValue += '-'; // Adiciona hífen após os próximos cinco dígitos
+            }
+            formattedValue += value[i];
+        }
+        return formattedValue;
+    }   
+$(document).ready(function() {
+    // Adicionando máscara para telefone e celular
+    $('#valor_contato').mask('(00) 0000-0000');
+});
+
+function mostrarMensagem(mensagem) {
+    $('#message').text(mensagem).show();
+    $('html, body').animate({
+        scrollTop: 0
+    }, 200);
+}
+
+$(document).ready(function() {
+    $('#fornecedorForm').submit(function(event) {
+        var allFieldsFilled = true;
+        $('#fornecedorForm').find('input').not('[type=hidden]').not('[name=complemento]').not('[name=valor_contato]').each(function() {
+            if ($(this).val().trim() === '') {
+                allFieldsFilled = false;
+                $(this).css('border', '1px solid red');
+            } else {
+                $(this).css('border', '');
+            }
+        });
+
+        $('#fornecedorForm').find('select').each(function() {
+            if ($(this).val().trim() === '') {
+                allFieldsFilled = false;
+                $(this).css('border', '1px solid red');
+            } else {
+                $(this).css('border', '');
+            }
+        });
+
+        if (!allFieldsFilled) {
+            mostrarMensagem("Por favor, preencha todos os campos obrigatórios.");
+            event.preventDefault();
+        }
+    });
+});
+
+function pesquisarCEP() {
+    var cep = $('#id_CEP').val().replace(/\D/g, '');
+    if (cep.length === 8) {
+        $.getJSON('https://viacep.com.br/ws/' + cep + '/json/', function(data) {
+            if (!("erro" in data)) {
+                $('#id_logradouro').val(data.logradouro);
+                $('#id_complemento').val(data.complemento);
+                $('#id_cidade').val(data.localidade);
+                $('#id_estado').val(data.uf);
+            } else {
+                mostrarMensagem("CEP não encontrado.");
+            }
+        }).fail(function() {
+            mostrarMensagem("Erro ao buscar informações do CEP.");
+        });
+    } else {
+        mostrarMensagem("CEP inválido.");
+    }
+}
+
+function validarCNPJ(cnpj) {
+    cnpj = cnpj.replace(/[^\d]+/g, '');
+    if (cnpj == '') return false;
+    if (cnpj.length != 14) return false;
+    if (cnpj.match(/^(.)\1+$/)) return false;
+
+    var tamanho = cnpj.length - 2;
+    var numeros = cnpj.substring(0, tamanho);
+    var digitos = cnpj.substring(tamanho);
+    var soma = 0;
+    var pos = tamanho - 7;
+    for (var i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    var resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado != digitos.charAt(0)) return false;
+
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+    for (var i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    return (resultado == digitos.charAt(1));
+}
+
+function salvarFornecedor() {
+    var cnpj = $('#id_cnpj').val();
+    var contatos = [];
+
+    // Percorre todas as linhas da tabela de contatos
+    $('#tabela_contatos tbody tr').each(function() {
+        var tipo = $(this).find('td:eq(0)').text();
+        var valor = $(this).find('td:eq(1)').text();
+        contatos.push({ tipo: tipo, valor: valor });
+    });
+
+    if (!validarCNPJ(cnpj)) {
+        mostrarMensagem('Por favor, verifique o CNPJ digitado e tente novamente.');
+        return;
+    }
+
+    if (contatos.length === 0) {
+        mostrarMensagem('Por favor, adicione pelo menos um contato.');
+        return;
+    }
+
+    // Adiciona os contatos serializados ao formulário como uma string JSON
+    $('#contatosExistentesJSON').val(JSON.stringify(contatos));
+
+    // Envia o formulário
+    $('#fornecedorForm').submit();
+}
+
+function contatoExiste(tipo, valor) {
+    var contatosExistentes = [];
+    // Percorre todas as linhas da tabela de contatos e verifica se já existe um contato com os mesmos valores
+    $('#tabela_contatos tbody tr').each(function() {
+        var tipoContato = $(this).find('td:eq(0)').text();
+        var valorContato = $(this).find('td:eq(1)').text();
+        contatosExistentes.push({ tipo: tipoContato, valor: valorContato });
+    });
+
+    for (var i = 0; i < contatosExistentes.length; i++) {
+        if (contatosExistentes[i].tipo === tipo && contatosExistentes[i].valor === valor) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function adicionarContato() {
+    var tipo = $('#tipo_contato option:selected').text();
+    var valor = $('#valor_contato').val();
+
+    if (tipo.trim() === '' || valor.trim() === '') {
+        mostrarMensagem('Por favor, preencha todos os campos do contato.');
+        return;
+    }
+
+    if (contatoExiste(tipo, valor)) {
+        mostrarMensagem('Este contato já foi adicionado.');
+        return;
+    }
+
+    $('#tabela_contatos tbody').append('<tr><td>' + tipo + '</td><td>' + valor + '</td><td><button type="button" class="btn btn-danger" onclick="removerContato(this)">Remover</button></td></tr>');
+
+    $('#valor_contato').val('');
+}
+
+function removerContato(button) {
+    $(button).closest('tr').remove();
+}
+
+function clearField() {
+        // Limpa o campo de entrada
+        $('input[id="valor_contato"]').val('');
+    }
+</script>
+{% endblock %}
+

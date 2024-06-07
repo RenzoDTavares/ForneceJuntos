@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Remover Fornecedor</h1>
+    <p>Tem certeza de que deseja remover o fornecedor "{{ fornecedor.razao_social }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar Remoção</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios de Fornecedores</title>
+</head>
+<body>
+    <h1>Relatórios de Fornecedores</h1>
+
+    <!-- Relatório 1: Lista de Fornecedores -->
+    <h2>Lista de Fornecedores</h2>
+    <form method="get">
+        <label for="tipo_bebida">Filtrar por Tipo de Bebida:</label>
+        <select id="tipo_bebida" name="tipo_bebida">
+            <option value="">Todos os Tipos</option>
+            <option value="Destilados">Destilados</option>
+            <option value="Vinhos">Vinhos</option>
+            <option value="Cervejas">Cervejas</option>
+            <option value="Espumantes">Espumantes</option>
+            <option value="Licores">Licores</option>
+            <option value="Refrescos">Refrescos</option>
+            <option value="Água">Água</option>
+        </select>
+        <label for="regiao">Filtrar por Região:</label>
+        <select id="regiao" name="regiao">
+            <option value="">Todas as Regiões</option>
+            <option value="Norte">Norte</option>
+            <option value="Nordeste">Nordeste</option>
+            <option value="Centro-Oeste">Centro-Oeste</option>
+            <option value="Sudeste">Sudeste</option>
+            <option value="Sul">Sul</option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Tipo de Bebida</th>
+                <th>Região</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fornecedor in fornecedores %}
+                <tr>
+                    <td>{{ fornecedor.nome }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td>{{ fornecedor.tipo_bebida }}</td>
+                    <td>{{ fornecedor.regiao }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Relatório 2: Distribuição dos Fornecedores por Tipo de Bebida -->
+    <h2>Distribuição dos Fornecedores por Tipo de Bebida</h2>
+    <form method="get">
+        <label for="tipo_bebida2">Filtrar por Tipo de Bebida:</label>
+        <select id="tipo_bebida2" name="tipo_bebida">
+            <option value="">Todos os Tipos</option>
+            <option value="Destilados">Destilados</option>
+            <option value="Vinhos">Vinhos</option>
+            <option value="Cervejas">Cervejas</option>
+            <option value="Espumantes">Espumantes</option>
+            <option value="Licores">Licores</option>
+            <option value="Refrescos">Refrescos</option>
+            <option value="Água">Água</option>
+        </select>
+        <label for="regiao2">Filtrar por Região:</label>
+        <select id="regiao2" name="regiao">
+            <option value="">Todas as Regiões</option>
+            <option value="Norte">Norte</option>
+            <option value="Nordeste">Nordeste</option>
+            <option value="Centro-Oeste">Centro-Oeste</option>
+            <option value="Sudeste">Sudeste</option>
+            <option value="Sul">Sul</option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+    <ul>
+        {% for tipo_bebida, fornecedores_tipo in fornecedores_por_tipo.items %}
+            <li>{{ tipo_bebida }}</li>
+            <ul>
+                {% for fornecedor in fornecedores_tipo %}
+                    <li>{{ fornecedor.nome }} - {{ fornecedor.cnpj }} - {{ fornecedor.regiao }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

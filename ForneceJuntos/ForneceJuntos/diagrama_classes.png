@@ -1,0 +1,29 @@
+digraph {
+	Fornecedor [label="Fornecedor
++-----------------+
+| - cnpj: String  |
+| - razao_social: String |
+| - nome_fantasia: String |
+| - cep: String   |
+| - logradouro: String |
+| - numero: int   |
+| - complemento: String |
+| - cidade: String|
+| - estado: String|
+| - agencia: String |
+| - banco: String |
+| - conta: String |
+| - tipo_bebida: String |
++-----------------+
+| +getContatos(): List<Contato> |
++-----------------+"]
+	Contato [label="Contato
++----------------+
+| - id: int      |
+| - tipo: String |
+| - valor: String|
++----------------+
+| +getFornecedor(): Fornecedor |
++----------------+"]
+	Fornecedor -> Contato [label="1..*" arrowhead=crow constraint=true]
+}
